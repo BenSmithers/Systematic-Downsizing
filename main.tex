@@ -1,0 +1,116 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[margin=0.75in]{geometry}
+
+%Used for doing math things
+\usepackage{amsmath}
+
+%Used for fonts, I guess?
+\usepackage{amsfonts}
+
+%allows for bold-faced mathematical symbols (like beta)
+\usepackage{bm}
+
+
+%I have no idea what this does, so I commented it out. If the file breaks, try un-commenting this out.
+%\usepackage[latin1]{inputenc}
+
+% Amssymb is for assorted symbols
+\usepackage{amssymb}
+
+%This allows for the enumeration of
+\usepackage{enumitem}
+
+%Used for seting the spacing density. 
+\usepackage{setspace}
+
+%The first package is used for incorporating images into the LaTeX file
+\usepackage{graphicx}
+
+%Allows the usage of the [H] argument, which forces figure/tabular placement to be HERE and nowhere else. 
+\usepackage{float}
+
+%These are useful commands I've hard-coded in.  
+\newcommand{\eps}{\epsilon}
+\newcommand{\braket}[1]{\left<#1\right>}
+\newcommand{\bra}[1]{\left< #1 \right|}
+\newcommand{\ket}[1]{\left| #1 \right>}
+\newcommand{\comm}[1]{\left[ #1 \right]}
+\newcommand{\cross}{\times}
+\newcommand{\abs}[1]{\left| #1 \right|}
+\newcommand{\bvec}[1]{\bm{#1}}
+
+%rcurs is the basic cursive one
+%\def\rcurs{{\mbox{$\resizebox{.16in}{.08in}{\includegraphics{ScriptR}}$}}}
+%\def\brcurs{{\mbox{$\resizebox{.16in}{.08in}{\includegraphics{BoldR}}$}}}
+%\def\hrcurs{{\mbox{$\hat \brcurs$}}}
+
+
+
+%Use this if you use images. Default path is the file's directory. 
+
+%\graphicspath{ {Path} }
+
+\usepackage{cancel}
+
+% Fancy Title
+
+\usepackage{array}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{L}[1]{>{\raggedleft\arraybackslash}p{#1}}
+\newcommand{\Qbox}[1]{\noindent\fbox{\parbox{\textwidth}{#1}}}
+
+\singlespacing
+
+\begin{document}
+\begin{table}
+	\centering
+	\begin{tabular}{R{2in} P{2in} L{2in}}
+		Benjamin Smithers & \begin{tabular}{c}{\Large Systematic Downsizing} \\ {\Large Matt Daemon }  \end{tabular} & Spring 2023 \\\hline
+	\end{tabular}
+
+\end{table}
+
+\section{Introduction and Summary}
+
+Here we present a review of a method for treating highly correlated sets of nuisance parameters. In short, one can transform the nuisance parameter basis into one where the parameters are uncorrelated.
+Then, we find whih new parameters have the largest effect on ones reconstructed signal, and identify the minimum number that will be necessary to span the space of shapes presentable by the full set of nuisance parameters in your reconstructed space. 
+
+\section{De-correlating systematic uncertainties}\label{sec:decor}
+
+Consider a set of $n$ nuisance parameters $\vec{x}$, each with mean $\mu$.
+A $n\times n$ matrix, $\Sigma$ defines the positive-definite covariance between these nuisance parameters. 
+If we assume the distribution is jointly normally distributed, then the probability density function defining the odds of sampling a set of nuisance parameters, $\vec{y}$, is given by
+\begin{equation}
+    P(\vec{y}) = \dfrac{1}{(2\pi)^{n/2}\abs{\Sigma}^{1/2}}\exp\left[-\tfrac{1}{2}(\vec{y}-\vec{\mu})^{T}\Sigma^{-1}\left(\vec{y}-\vec{\mu}\right)\right]
+\end{equation}
+where $\abs{\Sigma}$ is the determinant of $\Sigma$. We can first consider the transformation 
+\begin{equation}
+    \vec{p}\equiv \vec{y}-\vec{\mu}
+\end{equation}
+and consider instead the \textit{log} of the likelihood.
+This allows us to drop off the prefactors, since we ultimately will only care about the differences in log likelihoods.
+What we then have is 
+\begin{equation}
+    \ln P \equiv LLH \sim -\tfrac{1}{2}\vec{p}^{T}\Sigma^{-1}\vec{p}
+\end{equation}
+We can now, by construction, define a transformation $U$, satisfying $UU^{T}=I$, and a diagonal matrix $A$ such that 
+\begin{align}\label{eq:combo}
+    A&=U\Sigma^{-1}U^{T} & LLH &\sim -\tfrac{1}{2}(U\vec{p})^{T} U\Sigma^{-1}U^{T}(U \vec{p})
+\end{align}
+and we recover
+\begin{equation}
+    LLH \sim -\tfrac{1}{2}\vec{p'}^{T} A\vec{p'},
+\end{equation}
+where the primed vectors refer to the vectors transformed by $U$. Equation\eqref{eq:combo} can be re-expressed as 
+
+\section{Ranking}
+
+First, consider a function that takes a set of correlated nuisance parameters $\vec{x}$ and calculates the expectation...
+
+Using the methods of Section~\ref{sec:decor}, we solve for the eigenvalues and vectors of the covariance matrix to determine a the transformation to the un-correlated basis. 
+We also recover the prior widths on the new parameters in the uncorrelated basis. 
+
+    
+\end{document}
