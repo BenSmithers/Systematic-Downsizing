@@ -103,14 +103,47 @@ and we recover
 \begin{equation}
     LLH \sim -\tfrac{1}{2}\vec{p'}^{T} A\vec{p'},
 \end{equation}
-where the primed vectors refer to the vectors transformed by $U$. Equation\eqref{eq:combo} can be re-expressed as 
+where the primed vectors refer to the vectors transformed by $U$. The left side of equation~\eqref{eq:combo} can be re-expressed as 
+\begin{align}
+    A&=U\Sigma^{-1}U^{T} &  &\to & A' &= U^{T}\Sigma U,
+\end{align}
+or, since $A$ is diagonal,
+\begin{equation}\label{eq:mat}
+\Sigma U = U\left[ \begin{array}{cccc}\lambda_{!} & 0 & \ldots & 0 \\
+0 & \lambda_{2} & \ldots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \ldots & \lambda_{n} \end{array}\right].
+\end{equation}
+If we re-write the transformation matrix $U$ as a vector of its column vectors $\eta_{i}$, $U=\left[\begin{array}{ccc}\eta_{1} & \ldots & \eta_{n} \end{array}\right]$ then Equation can be expressed as 
+\begin{equation}
+\Sigma \eta_{i} = \lambda_{i}\eta_{i}.
+\end{equation}
+This tells us that the column vectors of the transformation matrix $U$ are the right eigenvectors of the covariance matrix $\Sigma$. 
+And each of the corresponding eigenvalues of $\Sigma$ are the entries along the diagonals in $A'$.
+
+So, for a given covariance matrix $\Sigma$, we solve for its eigenvalues and eigenvectors. 
+The eigenvalues each represent a gaussian prior width for new, uncorrelated, parameters in the new basis. 
+The matrix of the eigenvectors allows for transformations from the correlated to the uncorrelated basis. 
+Similarly, the inverse of that eigenvector matrix facilitates transformations back from the uncorrelated basis to the correlated basis. 
 
 \section{Ranking}
+ 
+Moving forwards, we need a function that takes a set of correlated nuisance parameters $\vec{x}$ and calculates a binned expectation.
+Generally this is done in three steps
+\begin{enumerate}
+    \item Generate a Monte Carlo sample
+    \item Use the Monte Carlo sample to calculate a binned central expectation for your sample
+    \item For each parameter $i$, and for each event $j$, calculate the 1D gradient for the weight about the central expectation, $\left.\tfrac{\partial w_{j}}{\partial x_{i}}\right|_{central}$
+\end{enumerate}
+Then each parameter could in principle be perturbed independently, a new weight calculated for each simulated event, and a new overall expectation calculated. Since the nuisance parameters are correlated, this isn't a good idea.  
 
-First, consider a function that takes a set of correlated nuisance parameters $\vec{x}$ and calculates the expectation...
+Using the methods of Section~\ref{sec:decor}, we solve for the eigenvalues and vectors of the covariance matrix to determine the transformation to the un-correlated basis and the widths of the uncorrelated priors. 
+For each uncorrelated parameter, we transform its $1\sigma$ deviation from its central value into the correlated basis, and use this set of nuisance parameters to calculate an expectation from the Monte Carlo gradients. 
 
-Using the methods of Section~\ref{sec:decor}, we solve for the eigenvalues and vectors of the covariance matrix to determine a the transformation to the un-correlated basis. 
-We also recover the prior widths on the new parameters in the uncorrelated basis. 
+We can then use a likelihood function, such as Equation\ref{eq:llh}, to calculate the impact of the uncorrelated parameter.
+\begin{equation}\label{eq:llh}
+-\Delta LLH = \tfrac{1}{2}\sum_{i=0}^{bins} \left(\dfrac{p_{i}-\mu_{i}}{\sigma_{i}}\right)^{2},
+\end{equation}
+summing over the $i$ bins, where $p_{i}$ is the perturbed value in a bin, $\mu$ is its mean, and $\sigma$ is the expected variance in the bin. For a Poissonian error, $\sigma=\sqrt{\mu}$.  
 
-    
 \end{document}
