@@ -67,7 +67,7 @@
 \begin{table}
 	\centering
 	\begin{tabular}{R{2in} P{2in} L{2in}}
-		Benjamin Smithers & \begin{tabular}{c}{\Large Systematic Downsizing} \\ {\Large Matt Daemon }  \end{tabular} & Spring 2023 \\\hline
+		Benjamin Smithers & \begin{tabular}{c}{\Large Systematic Downsizing} \\ {\small with math Daemonflux }  \end{tabular} & Spring 2023 \\\hline
 	\end{tabular}
 
 \end{table}
@@ -145,5 +145,55 @@ We can then use a likelihood function, such as Equation\ref{eq:llh}, to calculat
 -\Delta LLH = \tfrac{1}{2}\sum_{i=0}^{bins} \left(\dfrac{p_{i}-\mu_{i}}{\sigma_{i}}\right)^{2},
 \end{equation}
 summing over the $i$ bins, where $p_{i}$ is the perturbed value in a bin, $\mu$ is its mean, and $\sigma$ is the expected variance in the bin. For a Poissonian error, $\sigma=\sqrt{\mu}$.  
+
+\section{Trimming}
+
+\section{Daemonflux}
+
+Daemonflux~REF is combines the uncertainties on both the overall cosmic ray flux and the hadronic production rates in the cosmic ray air showers that follow when they impact our atmosphere.
+It is comprised of six ``global spline fit" parameters and seventeen more that relate to pion and kaon production at various energies. 
+These parameters are highly correlated, as shown in Figure~\ref{fig:cov}. 
+\begin{figure}\label{fig:cov}
+    \centering
+    \includegraphics[width=0.75\linewidth]{./figures/daemon_cov.png}
+\end{figure}
+
+Write about the gradient extraciton. 
+
+We proceed with calculating a new basis as in the previous sections, and calculate the impact of the new orthogonal parameters.
+This is done for the cascades sample developed by the diffuse group, and used in ongoing MEOWS analyses\footnote{MEOWS-C-2023}. 
+These are shown in Figure~\ref{fig:impact}.
+\begin{figure}\label{fig:impact}
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/daemon_distr.png}
+\end{figure}
+As is evident, the first few parameters have a much greater impact than those that follow.
+
+\subsection{Variance Testing}
+
+We first allow only the parameter with the biggest pull to vary, or ``ortho\_param0". 
+We then sample this value 10,000 times and calculate the $\Delta LLH$ at each sample. 
+We note the threshold value of $\Delta LLH$ below which 90\% of the samples $\Delta LLH$'s lie. 
+This process is then repeated for the two parameters with the largest pulls, and the new threshold noted.
+This is repeated until all 23 parameters are being varied at each step. 
+The $\Delta LLH$ thresholds, normalized to the one varrying the most, are shown in Figure~\ref{fig:distr}, where a horizontal line has been drawn at 0.95. 
+\begin{figure}\label{fig:distr}
+    \centering
+    \includegraphics[width=0.8\linewidth]{./figures/daemon_variance_cummulative.png}
+\end{figure}
+From this figure, we gather that seven or eight parameters are needed to account for 95\% of the variance in the whole ensemble. 
+
+\subsection{Shape Testing}
+
+It is also important to ensure the full configuration of shapes achievable, in reconstructed space, with a 23 parameter ensemble is also possible to achieve with a reduced number of parameters. 
+To test this, we sample all 23 parameters randomly. Then, by allowing only the $m$ strongest pulling parameters to vary, we carry out a fit to the fully shuffled expectation while leaving the last $23-m$ parameters fixed at their central values. 
+The distributions of best-fit $\Delta LLH$, are shown in Figure~\ref{fig:res}.
+\begin{figure}\label{fig:res}
+    \centering
+    \includegraphics[width=0.75\linewidth]{./figures/results.png}
+\end{figure}
+From this, most shapes appear to be realizable with as few as five parameters, although with some occasional deviations. 
+Once seven parameters are allowed to vary, no discrepancies are observed between fits and expectations generated with a full 23-parameter sampling. 
+
 
 \end{document}
